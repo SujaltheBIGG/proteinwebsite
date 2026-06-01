@@ -15,10 +15,11 @@
   "devEngines": {
     "packageManager": {
       "name": "pnpm",
-      "version": "^11.2.2",
+      "version": "11.2.2",
       "onFail": "download"
     }
   },
+  "packageManager": "pnpm@11.2.2",
   "type": "module",
   "dependencies": {
     "@gsap/react": "^2.1.2",
