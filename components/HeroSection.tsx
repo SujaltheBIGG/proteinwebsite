@@ -62,27 +62,30 @@ export default function HeroSection() {
       // Draw a frame onto the canvas with cover-fit scaling
       const drawFrame = (frameIndex: number) => {
         const img = imagesRef.current[frameIndex]
-        if (img && img.complete && ctx2d) {
-          ctx2d.clearRect(0, 0, canvas.width, canvas.height)
+        if (img && img.complete && img.naturalWidth > 0 && ctx2d) {
+          try {
+            const imgRatio = img.width / img.height
+            const canvasRatio = canvas.width / canvas.height
 
-          const imgRatio = img.width / img.height
-          const canvasRatio = canvas.width / canvas.height
+            let drawWidth, drawHeight, offsetX, offsetY
 
-          let drawWidth, drawHeight, offsetX, offsetY
+            if (imgRatio > canvasRatio) {
+              drawHeight = canvas.height
+              drawWidth = canvas.height * imgRatio
+              offsetX = (canvas.width - drawWidth) / 2
+              offsetY = 0
+            } else {
+              drawWidth = canvas.width
+              drawHeight = canvas.width / imgRatio
+              offsetX = 0
+              offsetY = (canvas.height - drawHeight) / 2
+            }
 
-          if (imgRatio > canvasRatio) {
-            drawHeight = canvas.height
-            drawWidth = canvas.height * imgRatio
-            offsetX = (canvas.width - drawWidth) / 2
-            offsetY = 0
-          } else {
-            drawWidth = canvas.width
-            drawHeight = canvas.width / imgRatio
-            offsetX = 0
-            offsetY = (canvas.height - drawHeight) / 2
+            ctx2d.clearRect(0, 0, canvas.width, canvas.height)
+            ctx2d.drawImage(img, offsetX, offsetY, drawWidth, drawHeight)
+          } catch (e) {
+            console.error('Failed to draw frame', e)
           }
-
-          ctx2d.drawImage(img, offsetX, offsetY, drawWidth, drawHeight)
         }
       }
 

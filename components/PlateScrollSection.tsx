@@ -65,29 +65,32 @@ export default function PlateScrollSection() {
       // Draw initial frame
       const drawFrame = (frameIndex: number) => {
         const img = imagesRef.current[frameIndex]
-        if (img && img.complete) {
-          ctx2d.clearRect(0, 0, canvas.width, canvas.height)
+        if (img && img.complete && img.naturalWidth > 0 && ctx2d) {
+          try {
+            // Calculate aspect ratio to contain the image within the canvas
+            const imgRatio = img.width / img.height
+            const canvasRatio = canvas.width / canvas.height
 
-          // Calculate aspect ratio to contain the image within the canvas
-          const imgRatio = img.width / img.height
-          const canvasRatio = canvas.width / canvas.height
+            let drawWidth, drawHeight, offsetX, offsetY
 
-          let drawWidth, drawHeight, offsetX, offsetY
+            // If image is wider than canvas, fit by width
+            if (imgRatio > canvasRatio) {
+              drawWidth = canvas.width
+              drawHeight = canvas.width / imgRatio
+              offsetX = 0
+              offsetY = (canvas.height - drawHeight) / 2 // Center vertically
+            } else { // If image is taller than canvas, fit by height
+              drawHeight = canvas.height
+              drawWidth = canvas.height * imgRatio
+              offsetX = (canvas.width - drawWidth) / 2 // Center horizontally
+              offsetY = 0
+            }
 
-          // If image is wider than canvas, fit by width
-          if (imgRatio > canvasRatio) {
-            drawWidth = canvas.width
-            drawHeight = canvas.width / imgRatio
-            offsetX = 0
-            offsetY = (canvas.height - drawHeight) / 2 // Center vertically
-          } else { // If image is taller than canvas, fit by height
-            drawHeight = canvas.height
-            drawWidth = canvas.height * imgRatio
-            offsetX = (canvas.width - drawWidth) / 2 // Center horizontally
-            offsetY = 0
+            ctx2d.clearRect(0, 0, canvas.width, canvas.height)
+            ctx2d.drawImage(img, offsetX, offsetY, drawWidth, drawHeight)
+          } catch (e) {
+            console.error('Failed to draw frame', e)
           }
-
-          ctx2d.drawImage(img, offsetX, offsetY, drawWidth, drawHeight)
         }
       }
 
