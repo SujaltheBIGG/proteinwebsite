@@ -47,12 +47,17 @@ export default function DishShowcase() {
 
           {/* Circular Dish Image */}
           <div style={{ position: 'relative', width: '420px', height: '420px', margin: '0 auto 32px' }}>
-            <div style={{ width: '100%', height: '100%', borderRadius: '50%', border: '4px solid var(--iron-orange)', boxShadow: '0 0 60px var(--iron-orange-glow)', overflow: 'hidden', background: 'var(--iron-surface)' }}>
-              <Image
+            <div style={{ width: '100%', height: '100%', borderRadius: '50%', border: '4px solid var(--iron-orange)', boxShadow: '0 0 60px var(--iron-orange-glow)', overflow: 'hidden', background: 'var(--iron-surface)', position: 'relative' }}>
+              <img
                 src={dish.image}
                 alt={dish.name}
-                fill
-                style={{ objectFit: 'cover' }}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover'
+                }}
                 onError={(e) => {
                   const target = e.target as HTMLImageElement
                   target.style.display = 'none'
@@ -94,11 +99,16 @@ export default function DishShowcase() {
                     position: 'relative',
                   }}
                 >
-                  <Image
+                  <img
                     src={item.image}
                     alt={item.name}
-                    fill
-                    style={{ objectFit: 'cover' }}
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover'
+                    }}
                     onError={(e) => {
                       const target = e.target as HTMLImageElement
                       target.style.display = 'none'

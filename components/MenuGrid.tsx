@@ -76,11 +76,18 @@ export default function MenuGrid() {
                 </span>
               </div>
 
-              <Image
+              <img
                 src={item.image}
                 alt={item.name}
-                fill
-                style={{ objectFit: 'cover', transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: 1 }}
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                  zIndex: 1
+                }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.transform = 'scale(1.08)'
                 }}
