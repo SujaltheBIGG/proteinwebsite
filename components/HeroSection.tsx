@@ -48,91 +48,7 @@ export default function HeroSection() {
     if (!imagesLoaded) return
 
     const ctx = gsap.context(() => {
-      // Content animations with enhanced easing and stagger
-      gsap.set(['.hero-badge', '.hero-h1', '.hero-macros', '.hero-sub', '.hero-cta'], { opacity: 0, y: 40 })
-      gsap.set('.hero-text-2', { opacity: 0, y: 40 })
-      gsap.to('.hero-badge',   { opacity: 1, y: 0, duration: 0.6, delay: 0.1,  ease: 'power3.out' })
-      gsap.to('.hero-h1',      { opacity: 1, y: 0, duration: 1.0, delay: 0.25, ease: 'power4.out' })
-      gsap.to('.hero-macros',  { opacity: 1, y: 0, duration: 0.6, delay: 0.5,  ease: 'back.out(1.7)', stagger: 0.08 })
-      gsap.to('.hero-sub',     { opacity: 1, y: 0, duration: 0.6, delay: 0.7, ease: 'power3.out' })
-      gsap.to('.hero-cta',     { opacity: 1, y: 0, duration: 0.6, delay: 0.85, ease: 'back.out(1.7)' })
-
-      // Scroll-based fade out for first hero text and fade in for second hero text
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: '+=400%',
-        scrub: 1,
-        onUpdate: (self) => {
-          // First hero text: fade out from 10% to 30% progress
-          const fade1Start = 0.1
-          const fade1End = 0.3
-          let opacity1 = 1
-          
-          if (self.progress >= fade1Start) {
-            const fadeProgress = (self.progress - fade1Start) / (fade1End - fade1Start)
-            opacity1 = Math.max(0, 1 - fadeProgress)
-          }
-          
-          gsap.set('.hero-text-1', { opacity: opacity1 })
-
-          // Second hero text: fade in from 85% to 100%
-          const fade2InStart = 0.85
-          const fade2InEnd = 1.0
-          const fade2OutStart = 1.0
-          const fade2OutEnd = 1.0
-          let opacity2 = 0
-          
-          if (self.progress >= fade2InStart && self.progress <= fade2InEnd) {
-            // Fading in
-            opacity2 = (self.progress - fade2InStart) / (fade2InEnd - fade2InStart)
-          } else if (self.progress > fade2InEnd && self.progress < fade2OutStart) {
-            // Fully visible
-            opacity2 = 1
-          } else if (self.progress >= fade2OutStart && self.progress <= fade2OutEnd) {
-            // Fading out
-            opacity2 = Math.max(0, (fade2OutEnd - self.progress) / (fade2OutEnd - fade2OutStart))
-          }
-          
-          gsap.set('.hero-text-2', { opacity: opacity2 })
-        }
-      })
-
-      // Ingredient label animations - show all when burger is centered
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: '+=400%',
-        scrub: 1,
-        onUpdate: (self) => {
-          // Show all labels when burger is centered (around 40-60% scroll progress)
-          const showStart = 0.4
-          const showEnd = 0.6
-          let opacity = 0
-          
-          if (self.progress >= showStart && self.progress <= showEnd) {
-            const rangeDuration = showEnd - showStart
-            const fadeInDuration = rangeDuration * 0.2
-            const fadeOutDuration = rangeDuration * 0.2
-            
-            if (self.progress < showStart + fadeInDuration) {
-              // Fading in
-              opacity = (self.progress - showStart) / fadeInDuration
-            } else if (self.progress > showEnd - fadeOutDuration) {
-              // Fading out
-              opacity = (showEnd - self.progress) / fadeOutDuration
-            } else {
-              // Fully visible
-              opacity = 1
-            }
-          }
-          
-          // Apply same opacity to all ingredient labels
-          gsap.set('.ingredient-label', { opacity })
-        }
-      })
-
-      // Scroll-based frame animation
+      // Set up canvas for frame drawing
       const canvas = canvasRef.current
       if (!canvas) return
 
@@ -143,18 +59,17 @@ export default function HeroSection() {
       canvas.width = window.innerWidth
       canvas.height = window.innerHeight
 
-      // Draw initial frame
+      // Draw a frame onto the canvas with cover-fit scaling
       const drawFrame = (frameIndex: number) => {
         const img = imagesRef.current[frameIndex]
-        if (img && img.complete) {
+        if (img && img.complete && ctx2d) {
           ctx2d.clearRect(0, 0, canvas.width, canvas.height)
-          
-          // Calculate aspect ratio to cover the canvas
+
           const imgRatio = img.width / img.height
           const canvasRatio = canvas.width / canvas.height
-          
+
           let drawWidth, drawHeight, offsetX, offsetY
-          
+
           if (imgRatio > canvasRatio) {
             drawHeight = canvas.height
             drawWidth = canvas.height * imgRatio
@@ -166,44 +81,79 @@ export default function HeroSection() {
             offsetX = 0
             offsetY = (canvas.height - drawHeight) / 2
           }
-          
+
           ctx2d.drawImage(img, offsetX, offsetY, drawWidth, drawHeight)
         }
       }
 
-      // Initial draw
+      // Draw initial frame
       drawFrame(0)
 
-      // Create scroll-based animation
-      gsap.to({}, {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=400%', // Animation plays over 4x viewport height for smoother, slower playback
-          scrub: 0.5, // Lower scrub value for smoother interpolation
-          pin: true, // Pin the hero section while animation plays
-          onUpdate: (self) => {
-            const progress = self.progress
-            const frameIndex = Math.floor(progress * (totalFrames - 1))
-            setCurrentFrame(frameIndex)
-            drawFrame(frameIndex)
-          },
-          onLeave: () => {
-            // Fade out the entire hero section when leaving
-            gsap.to(sectionRef.current, {
-              opacity: 0,
-              duration: 0.5,
-              ease: 'power2.out'
-            })
-          },
-          onEnterBack: () => {
-            // Fade back in when scrolling back up
-            gsap.to(sectionRef.current, {
-              opacity: 1,
-              duration: 0.5,
-              ease: 'power2.out'
-            })
+      // Content animations with enhanced easing and stagger
+      gsap.set(['.hero-badge', '.hero-h1', '.hero-macros', '.hero-sub', '.hero-cta'], { opacity: 0, y: 40 })
+      gsap.set('.hero-text-2', { opacity: 0, y: 40 })
+      gsap.to('.hero-badge',   { opacity: 1, y: 0, duration: 0.6, delay: 0.1,  ease: 'power3.out' })
+      gsap.to('.hero-h1',      { opacity: 1, y: 0, duration: 1.0, delay: 0.25, ease: 'power4.out' })
+      gsap.to('.hero-macros',  { opacity: 1, y: 0, duration: 0.6, delay: 0.5,  ease: 'back.out(1.7)', stagger: 0.08 })
+      gsap.to('.hero-sub',     { opacity: 1, y: 0, duration: 0.6, delay: 0.7, ease: 'power3.out' })
+      gsap.to('.hero-cta',     { opacity: 1, y: 0, duration: 0.6, delay: 0.85, ease: 'back.out(1.7)' })
+
+      // Single ScrollTrigger to handle pinning, frames, and all text/label fades
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: '+=400%', // Animation plays over 4x viewport height
+        scrub: 0.5,
+        pin: true,
+        onUpdate: (self) => {
+          // --- TEXT FADES ---
+          const fade1Start = 0.1
+          const fade1End = 0.3
+          let opacity1 = 1
+          
+          if (self.progress >= fade1Start) {
+            const fadeProgress = (self.progress - fade1Start) / (fade1End - fade1Start)
+            opacity1 = Math.max(0, 1 - fadeProgress)
           }
+          
+          gsap.set('.hero-text-1', { opacity: opacity1 })
+
+          const fade2InStart = 0.85
+          const fade2InEnd = 1.0
+          let opacity2 = 0
+          
+          if (self.progress >= fade2InStart && self.progress <= fade2InEnd) {
+            opacity2 = (self.progress - fade2InStart) / (fade2InEnd - fade2InStart)
+          } else if (self.progress > fade2InEnd) {
+            opacity2 = 1
+          }
+          
+          gsap.set('.hero-text-2', { opacity: opacity2 })
+
+          // --- INGREDIENT LABELS ---
+          const showStart = 0.4
+          const showEnd = 0.6
+          let labelOpacity = 0
+          
+          if (self.progress >= showStart && self.progress <= showEnd) {
+            const rangeDuration = showEnd - showStart
+            const fadeInDuration = rangeDuration * 0.2
+            const fadeOutDuration = rangeDuration * 0.2
+            
+            if (self.progress < showStart + fadeInDuration) {
+              labelOpacity = (self.progress - showStart) / fadeInDuration
+            } else if (self.progress > showEnd - fadeOutDuration) {
+              labelOpacity = (showEnd - self.progress) / fadeOutDuration
+            } else {
+              labelOpacity = 1
+            }
+          }
+          gsap.set('.ingredient-label', { opacity: labelOpacity })
+
+          // --- FRAMES ---
+          const frameIndex = Math.floor(self.progress * (totalFrames - 1))
+          setCurrentFrame(frameIndex)
+          drawFrame(frameIndex)
         }
       })
 

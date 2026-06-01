@@ -46,71 +46,10 @@ export default function PlateScrollSection() {
     if (!imagesLoaded) return
 
     const ctx = gsap.context(() => {
-      // Set initial state - fade out
-      gsap.set(sectionRef.current, {
-        opacity: 0
-      })
-
-      // Animate in when section enters - synchronized with hero fade out
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top bottom-=200',
-        onEnter: () => {
-          gsap.to(sectionRef.current, {
-            opacity: 1,
-            duration: 0.5,
-            ease: 'power2.out'
-          })
-        },
-        onLeaveBack: () => {
-          gsap.to(sectionRef.current, {
-            opacity: 0,
-            duration: 0.3,
-            ease: 'power2.in'
-          })
-        }
-      })
-
       // Content animations
       gsap.set('.plate-text-1', { opacity: 0, y: 30 })
       gsap.set('.plate-text-2', { opacity: 0, y: 30 })
       gsap.to('.plate-text-1', { opacity: 1, y: 0, duration: 0.8, delay: 0.25, ease: 'power3.out' })
-
-      // Scroll-based fade out for right text and fade in for left text
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top top',
-        end: '+=400%',
-        scrub: 1,
-        onUpdate: (self) => {
-          // Right text: fade out from 10% to 30% progress
-          const fade1Start = 0.1
-          const fade1End = 0.3
-          let opacity1 = 1
-          
-          if (self.progress >= fade1Start) {
-            const fadeProgress = (self.progress - fade1Start) / (fade1End - fade1Start)
-            opacity1 = Math.max(0, 1 - fadeProgress)
-          }
-          
-          gsap.set('.plate-text-1', { opacity: opacity1 })
-
-          // Left text: fade in from 40% to 55% and stay visible
-          const fade2InStart = 0.4
-          const fade2InEnd = 0.55
-          let opacity2 = 0
-          
-          if (self.progress >= fade2InStart && self.progress <= fade2InEnd) {
-            // Fading in
-            opacity2 = (self.progress - fade2InStart) / (fade2InEnd - fade2InStart)
-          } else if (self.progress > fade2InEnd) {
-            // Fully visible and stays visible
-            opacity2 = 1
-          }
-          
-          gsap.set('.plate-text-2', { opacity: opacity2 })
-        }
-      })
 
       // Scroll-based frame animation
       const canvas = canvasRef.current
@@ -155,36 +94,44 @@ export default function PlateScrollSection() {
       // Initial draw
       drawFrame(0)
 
-      // Create scroll-based animation
-      gsap.to({}, {
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: '+=400%',
-          scrub: 0.2,
-          pin: true,
-          onUpdate: (self) => {
-            const progress = self.progress
-            const frameIndex = Math.floor(progress * (totalFrames - 1))
-            setCurrentFrame(frameIndex)
-            drawFrame(frameIndex)
-          },
-          onLeave: () => {
-            // Fade out the entire plate section when leaving
-            gsap.to(sectionRef.current, {
-              opacity: 0,
-              duration: 0.5,
-              ease: 'power2.out'
-            })
-          },
-          onEnterBack: () => {
-            // Fade back in when scrolling back up
-            gsap.to(sectionRef.current, {
-              opacity: 1,
-              duration: 0.5,
-              ease: 'power2.out'
-            })
+      // Single consolidated ScrollTrigger for pinning, frames, and text fades
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: 'top top',
+        end: '+=400%',
+        scrub: 0.5,
+        pin: true,
+        onUpdate: (self) => {
+          // --- FRAME ANIMATION ---
+          const frameIndex = Math.floor(self.progress * (totalFrames - 1))
+          setCurrentFrame(frameIndex)
+          drawFrame(frameIndex)
+
+          // --- TEXT FADES ---
+          // Right text: fade out from 10% to 30% progress
+          const fade1Start = 0.1
+          const fade1End = 0.3
+          let opacity1 = 1
+          
+          if (self.progress >= fade1Start) {
+            const fadeProgress = (self.progress - fade1Start) / (fade1End - fade1Start)
+            opacity1 = Math.max(0, 1 - fadeProgress)
           }
+          
+          gsap.set('.plate-text-1', { opacity: opacity1 })
+
+          // Left text: fade in from 40% to 55% and stay visible
+          const fade2InStart = 0.4
+          const fade2InEnd = 0.55
+          let opacity2 = 0
+          
+          if (self.progress >= fade2InStart && self.progress <= fade2InEnd) {
+            opacity2 = (self.progress - fade2InStart) / (fade2InEnd - fade2InStart)
+          } else if (self.progress > fade2InEnd) {
+            opacity2 = 1
+          }
+          
+          gsap.set('.plate-text-2', { opacity: opacity2 })
         }
       })
 

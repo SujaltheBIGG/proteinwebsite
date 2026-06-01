@@ -10,31 +10,6 @@ export default function FullScreenImage() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Set initial state - fade out
-      gsap.set(sectionRef.current, {
-        opacity: 0
-      })
-
-      // Animate in when section enters - synchronized with plate section fade out
-      ScrollTrigger.create({
-        trigger: sectionRef.current,
-        start: 'top bottom-=200',
-        onEnter: () => {
-          gsap.to(sectionRef.current, {
-            opacity: 1,
-            duration: 0.5,
-            ease: 'power2.out'
-          })
-        },
-        onLeaveBack: () => {
-          gsap.to(sectionRef.current, {
-            opacity: 0,
-            duration: 0.3,
-            ease: 'power2.in'
-          })
-        }
-      })
-
       // Parallax effect on image
       gsap.to('.fullscreen-image', {
         yPercent: 20,
