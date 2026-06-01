@@ -50,7 +50,7 @@ export default function HeroSection() {
     const ctx = gsap.context(() => {
       // Content animations with enhanced easing and stagger
       gsap.set(['.hero-badge', '.hero-h1', '.hero-macros', '.hero-sub', '.hero-cta'], { opacity: 0, y: 40 })
-      gsap.set(['.hero-h1-2', '.hero-macros-2', '.hero-sub-2', '.hero-cta-2'], { opacity: 0, y: 40 })
+      gsap.set('.hero-text-2', { opacity: 0, y: 40 })
       gsap.to('.hero-badge',   { opacity: 1, y: 0, duration: 0.6, delay: 0.1,  ease: 'power3.out' })
       gsap.to('.hero-h1',      { opacity: 1, y: 0, duration: 1.0, delay: 0.25, ease: 'power4.out' })
       gsap.to('.hero-macros',  { opacity: 1, y: 0, duration: 0.6, delay: 0.5,  ease: 'back.out(1.7)', stagger: 0.08 })
@@ -74,7 +74,7 @@ export default function HeroSection() {
             opacity1 = Math.max(0, 1 - fadeProgress)
           }
           
-          gsap.set(['.hero-badge', '.hero-h1', '.hero-macros', '.hero-sub', '.hero-cta'], { opacity: opacity1 })
+          gsap.set('.hero-text-1', { opacity: opacity1 })
 
           // Second hero text: fade in from 85% to 100%
           const fade2InStart = 0.85
@@ -94,7 +94,7 @@ export default function HeroSection() {
             opacity2 = Math.max(0, (fade2OutEnd - self.progress) / (fade2OutEnd - fade2OutStart))
           }
           
-          gsap.set(['.hero-h1-2', '.hero-macros-2', '.hero-sub-2', '.hero-cta-2'], { opacity: opacity2 })
+          gsap.set('.hero-text-2', { opacity: opacity2 })
         }
       })
 
@@ -352,7 +352,7 @@ export default function HeroSection() {
           paddingRight: 'clamp(24px, 4vw, 80px)',
         }}
       >
-        <div style={{ maxWidth: '700px' }}>
+        <div className="hero-text-1" style={{ maxWidth: '700px' }}>
           {/* Tag Badge */}
           <div className="hero-badge" style={{ marginBottom: '24px' }}>
             <span className="macro-pill">#1 HIGH PROTEIN BURGER · SHOREDITCH, LONDON</span>

@@ -11,23 +11,22 @@ export default function AboutOrigin() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Header animations with enhanced reveal
-      gsap.fromTo('.about-label',
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 60%' } }
-      )
-      gsap.fromTo('.about-headline',
+      // Header reveal as one unit
+      gsap.fromTo('.about-header-group',
         { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, ease: 'power4.out', delay: 0.15, scrollTrigger: { trigger: sectionRef.current, start: 'top 55%' } }
+        { y: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } }
       )
 
-      // Body text animations with enhanced reveal
-      gsap.fromTo('.about-body p',
+      // Body text reveal as one unit
+      gsap.fromTo('.about-body',
         { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.2, scrollTrigger: { trigger: sectionRef.current, start: 'top 50%' } }
+        { y: 0, opacity: 1, duration: 0.9, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 65%' } }
       )
-      gsap.fromTo('.about-badges .macro-pill',
-        { y: 40, opacity: 0, scale: 0.9 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.7, ease: 'back.out(1.7)', stagger: 0.12, scrollTrigger: { trigger: sectionRef.current, start: 'top 45%' } }
+
+      // Badges reveal together
+      gsap.fromTo('.about-badges',
+        { y: 40, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'back.out(1.7)', scrollTrigger: { trigger: sectionRef.current, start: 'top 55%' } }
       )
     }, sectionRef)
     return () => ctx.revert()
@@ -50,22 +49,24 @@ export default function AboutOrigin() {
       }}
     >
       <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', maxWidth: '800px' }}>
-        <p className="about-label section-label" style={{ marginBottom: '24px' }}>
-          — WHO WE ARE —
-        </p>
-        <h2
-          className="about-headline"
-          style={{
-            fontFamily: 'var(--font-display)',
-            fontSize: 'clamp(56px, 7vw, 96px)',
-            lineHeight: 0.88,
-            color: 'var(--iron-cream)',
-            marginBottom: '48px',
-          }}
-        >
-          BUILT IN EAST LONDON.<br />
-          FUELLED BY <span style={{ color: 'var(--iron-orange)' }}>OBSESSION.</span>
-        </h2>
+        <div className="about-header-group">
+          <p className="about-label section-label" style={{ marginBottom: '24px' }}>
+            — WHO WE ARE —
+          </p>
+          <h2
+            className="about-headline"
+            style={{
+              fontFamily: 'var(--font-display)',
+              fontSize: 'clamp(56px, 7vw, 96px)',
+              lineHeight: 0.88,
+              color: 'var(--iron-cream)',
+              marginBottom: '48px',
+            }}
+          >
+            BUILT IN EAST LONDON.<br />
+            FUELLED BY <span style={{ color: 'var(--iron-orange)' }}>OBSESSION.</span>
+          </h2>
+        </div>
         <div className="about-body" style={{ maxWidth: '640px' }}>
           <p style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: 'var(--iron-muted)', lineHeight: 1.8, marginBottom: '24px' }}>
             IRONPLATE™ was born in 2021 in a 12-seat kitchen off Bethnal Green Road. Chef Marcus Webb spent three years testing smash techniques before serving a single burger to the public.

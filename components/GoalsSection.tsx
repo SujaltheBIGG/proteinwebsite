@@ -11,20 +11,16 @@ export default function GoalsSection() {
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Header animations with enhanced reveal
-      gsap.fromTo('.goals-content h3',
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 60%' } }
-      )
-      gsap.fromTo('.goals-content p',
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', delay: 0.15, scrollTrigger: { trigger: sectionRef.current, start: 'top 55%' } }
+      // Header content reveal as one unit
+      gsap.fromTo('.goals-content',
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } }
       )
 
-      // Accordion items animations with enhanced reveal
+      // Accordion items with stagger
       gsap.fromTo('.accordion-css__item',
         { y: 80, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.2, scrollTrigger: { trigger: sectionRef.current, start: 'top 50%' } }
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.2, scrollTrigger: { trigger: sectionRef.current, start: 'top 60%' } }
       )
     }, sectionRef)
     return () => ctx.revert()

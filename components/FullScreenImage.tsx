@@ -52,29 +52,10 @@ export default function FullScreenImage() {
         { opacity: 1, scale: 1, duration: 1.2, ease: 'power2.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 80%' } }
       )
 
-      // Text reveal animation for headline with character stagger
-      const headline = sectionRef.current?.querySelector('h1')
-      if (headline) {
-        gsap.fromTo(headline,
-          { y: 60, opacity: 0 },
-          { y: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } }
-        )
-      }
-
-      // Text reveal for macro pills with enhanced stagger
-      gsap.fromTo('.fullscreen-content .macro-pill',
-        { y: 30, opacity: 0, scale: 0.9 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(1.7)', stagger: 0.15, scrollTrigger: { trigger: sectionRef.current, start: 'top 70%' } }
+      gsap.fromTo('.fullscreen-content',
+        { y: 80, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 70%' } }
       )
-
-      // Text reveal for description
-      const description = sectionRef.current?.querySelector('p')
-      if (description) {
-        gsap.fromTo(description,
-          { y: 40, opacity: 0 },
-          { y: 0, opacity: 1, duration: 0.8, ease: 'power2.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 65%' } }
-        )
-      }
     }, sectionRef)
     return () => ctx.revert()
   }, [])

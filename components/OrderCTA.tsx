@@ -5,34 +5,15 @@ import { Mail, X } from 'lucide-react'
 
 export default function OrderCTA() {
   const sectionRef = useRef<HTMLElement>(null)
-  const headlineRef = useRef<HTMLHeadingElement>(null)
   const ctaRef = useRef<HTMLButtonElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Section label animation with enhanced reveal
-      gsap.fromTo('.section-label',
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 60%' } }
-      )
-
-      // Headline animation with enhanced reveal
-      gsap.fromTo(headlineRef.current,
-        { y: 80, scale: 0.9, opacity: 0 },
-        { y: 0, scale: 1, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 55%' } }
-      )
-
-      // Subtext animation with enhanced reveal
-      gsap.fromTo('.order-subtext',
-        { y: 40, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.7, ease: 'power3.out', stagger: 0.1, scrollTrigger: { trigger: sectionRef.current, start: 'top 50%' } }
-      )
-
-      // CTA button animation with enhanced reveal
-      gsap.fromTo(ctaRef.current,
-        { y: 40, scale: 0.9, opacity: 0 },
-        { y: 0, scale: 1, opacity: 1, duration: 0.8, ease: 'back.out(1.7)', scrollTrigger: { trigger: sectionRef.current, start: 'top 45%' } }
+      // Entire centered content block reveals as one unit
+      gsap.fromTo('.order-content-block',
+        { y: 80, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1.2, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 60%' } }
       )
 
       // Pulse animation for CTA
@@ -40,7 +21,7 @@ export default function OrderCTA() {
         scale: 1.04,
         duration: 0.2,
         ease: 'power2.out',
-        delay: 1.0,
+        delay: 1.5,
         yoyo: true,
         repeat: 1,
         scrollTrigger: { trigger: sectionRef.current, start: 'top 45%' }
@@ -104,13 +85,12 @@ export default function OrderCTA() {
       <hr className="rule-hot" style={{ width: '100%', marginBottom: '64px', zIndex: 2, position: 'relative' }} />
 
       {/* Centered Content */}
-      <div style={{ maxWidth: '700px', textAlign: 'center', zIndex: 2, position: 'relative' }}>
+      <div className="order-content-block" style={{ maxWidth: '700px', textAlign: 'center', zIndex: 2, position: 'relative' }}>
         <span className="section-label" style={{ display: 'block', marginBottom: '24px' }}>
           READY TO FUEL UP?
         </span>
 
         <h1
-          ref={headlineRef}
           style={{
             fontFamily: 'var(--font-display)',
             fontSize: 'clamp(80px, 15vw, 180px)',

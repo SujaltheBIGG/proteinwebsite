@@ -12,6 +12,13 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.2.2",
+      "onFail": "download"
+    }
+  },
   "type": "module",
   "dependencies": {
     "@gsap/react": "^2.1.2",

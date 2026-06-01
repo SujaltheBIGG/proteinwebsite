@@ -9,44 +9,23 @@ gsap.registerPlugin(ScrollTrigger)
 
 export default function MenuGrid() {
   const sectionRef = useRef<HTMLElement>(null)
-  const labelRef = useRef<HTMLParagraphElement>(null)
-  const headlineRef = useRef<HTMLHeadingElement>(null)
   const [imageLoaded, setImageLoaded] = useState<{ [key: number]: boolean }>({})
 
   useEffect(() => {
-    // Test if GSAP is working with a simple animation
-    if (labelRef.current) {
-      gsap.fromTo(labelRef.current,
-        { opacity: 0, y: 30 },
-        { opacity: 1, y: 0, duration: 0.8, delay: 0.5 }
+    const ctx = gsap.context(() => {
+      // Section header reveal
+      gsap.fromTo('.menu-header-content',
+        { y: 60, opacity: 0 },
+        { y: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } }
       )
-    }
 
-    // Test scroll trigger
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            console.log('Menu section is in view')
-            if (headlineRef.current) {
-              gsap.fromTo(headlineRef.current,
-                { opacity: 0, y: 30 },
-                { opacity: 1, y: 0, duration: 0.8 }
-              )
-            }
-          }
-        })
-      },
-      { threshold: 0.5 }
-    )
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-
-    return () => {
-      observer.disconnect()
-    }
+      // Menu cards staggered reveal
+      gsap.fromTo('.menu-card',
+        { y: 80, opacity: 0 },
+        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', stagger: 0.1, scrollTrigger: { trigger: '.menu-grid', start: 'top 80%' } }
+      )
+    }, sectionRef)
+    return () => ctx.revert()
   }, [])
 
   const scrollToOrder = () =>
@@ -55,9 +34,9 @@ export default function MenuGrid() {
   return (
     <section id="menu" ref={sectionRef} style={{ padding: 'clamp(64px, 8vw, 120px) clamp(16px, 4vw, 80px)', background: 'var(--iron-bg)' }}>
       {/* Section Header */}
-      <div style={{ textAlign: 'center', marginBottom: '64px' }}>
-        <span ref={labelRef} className="section-label" style={{ display: 'block', marginBottom: '16px' }}>— FULL MENU —</span>
-        <h2 ref={headlineRef} className="menu-headline" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(48px, 8vw, 80px)', color: 'var(--iron-cream)', letterSpacing: '4px', lineHeight: 1 }}>
+      <div className="menu-header-content" style={{ textAlign: 'center', marginBottom: '64px' }}>
+        <span className="section-label" style={{ display: 'block', marginBottom: '16px' }}>— FULL MENU —</span>
+        <h2 className="menu-headline" style={{ fontFamily: 'var(--font-display)', fontSize: 'clamp(48px, 8vw, 80px)', color: 'var(--iron-cream)', letterSpacing: '4px', lineHeight: 1 }}>
           PICK YOUR <span style={{ color: 'var(--iron-orange)' }}>FUEL</span>
         </h2>
       </div>

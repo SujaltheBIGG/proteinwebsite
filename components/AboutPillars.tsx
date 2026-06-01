@@ -11,19 +11,16 @@ export default function AboutPillars() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Header animations with enhanced reveal
-      gsap.fromTo('.pillars-header .section-label',
-        { y: 50, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.8, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 60%' } }
-      )
-      gsap.fromTo('.pillars-header h3',
+      // Header reveal as one unit
+      gsap.fromTo('.pillars-header',
         { y: 60, opacity: 0 },
-        { y: 0, opacity: 1, duration: 0.9, ease: 'power4.out', delay: 0.15, scrollTrigger: { trigger: sectionRef.current, start: 'top 55%' } }
+        { y: 0, opacity: 1, duration: 1, ease: 'power3.out', scrollTrigger: { trigger: sectionRef.current, start: 'top 75%' } }
       )
 
       // Card animations with enhanced reveal and scale effect
       gsap.fromTo('.pillar-card',
         { y: 80, opacity: 0, scale: 0.95 },
-        { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)', stagger: 0.15, scrollTrigger: { trigger: sectionRef.current, start: 'top 50%' } }
+        { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: 'back.out(1.7)', stagger: 0.15, scrollTrigger: { trigger: sectionRef.current, start: 'top 60%' } }
       )
 
       // Add hover effect enhancement for cards

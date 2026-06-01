@@ -72,11 +72,9 @@ export default function PlateScrollSection() {
       })
 
       // Content animations
-      gsap.set(['.plate-h1', '.plate-macros', '.plate-sub'], { opacity: 0, y: 30 })
-      gsap.set(['.plate-h1-2', '.plate-macros-2', '.plate-sub-2'], { opacity: 0, y: 30 })
-      gsap.to('.plate-h1',      { opacity: 1, y: 0, duration: 0.8, delay: 0.25, ease: 'power3.out' })
-      gsap.to('.plate-macros',  { opacity: 1, y: 0, duration: 0.5, delay: 0.5,  ease: 'power2.out' })
-      gsap.to('.plate-sub',     { opacity: 1, y: 0, duration: 0.5, delay: 0.65, ease: 'power2.out' })
+      gsap.set('.plate-text-1', { opacity: 0, y: 30 })
+      gsap.set('.plate-text-2', { opacity: 0, y: 30 })
+      gsap.to('.plate-text-1', { opacity: 1, y: 0, duration: 0.8, delay: 0.25, ease: 'power3.out' })
 
       // Scroll-based fade out for right text and fade in for left text
       ScrollTrigger.create({
@@ -95,7 +93,7 @@ export default function PlateScrollSection() {
             opacity1 = Math.max(0, 1 - fadeProgress)
           }
           
-          gsap.set(['.plate-h1', '.plate-macros', '.plate-sub'], { opacity: opacity1 })
+          gsap.set('.plate-text-1', { opacity: opacity1 })
 
           // Left text: fade in from 40% to 55% and stay visible
           const fade2InStart = 0.4
@@ -110,7 +108,7 @@ export default function PlateScrollSection() {
             opacity2 = 1
           }
           
-          gsap.set(['.plate-h1-2', '.plate-macros-2', '.plate-sub-2'], { opacity: opacity2 })
+          gsap.set('.plate-text-2', { opacity: opacity2 })
         }
       })
 
@@ -338,7 +336,7 @@ export default function PlateScrollSection() {
         </div>
 
         {/* Right side text */}
-        <div style={{ maxWidth: '700px' }}>
+        <div className="plate-text-1" style={{ maxWidth: '700px' }}>
           {/* Headline */}
           <h1
             className="plate-h1"
